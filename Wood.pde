@@ -44,6 +44,7 @@ class Wood
     
      cellRow = cellRowList.get(cellRowList.size());
      
+     
      b3Vector = cellRow.startVector;
      b4Vector = cellRow.endVector;
     
