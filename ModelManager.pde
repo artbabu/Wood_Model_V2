@@ -6,13 +6,21 @@ class ModelManager
    Cell currCell ;
    Face currFace ;
    
+   int cellRowCount ;
+   
+   
    Wood currWood;
    
    ModelUtil mu ;
    
-   float tanXLen = 25 ; // incre in x direction
-   float radZLen = 25 ; // incre in z direction
-   float longYLen = 250;
+   float maxLTanXLen = 25 ;
+   float maxETanXLen = 50 ;
+  
+   //float maxLRadZLen = 20 ;
+   //float maxERadZLen = 50 ; // incre in z direction
+   
+   float defRadZLen = 5 ;
+   float defLongYLen = 250;
   
     char[] csArray ;
     int currPos = 0 ;
@@ -23,8 +31,7 @@ class ModelManager
      mu = new ModelUtil();
    }
    
-   public void parseGrammar(String production)
-   
+   public void parseGrammar(String production) 
    { 
      csArray = production.toCharArray();
      
@@ -38,14 +45,21 @@ class ModelManager
    
    public void setCurrCellRow(CellRow cr)
    {
-     currCellRow = cr ;
+    
+       currCellRow = cr ;
+       currCellRow.longYLen = defLongYLen ;
+       currCellRow.radZLen = defRadZLen ;
+     
    }
    
    public void addCurrCellRowToWood(PVector endColVec)
    {
+      if(currCellRow.cellList.size() != 0)
+     {
      currCellRow.setEndVector(endColVec) ;
      currWood.cellRowList.add(currCellRow);
      currWood.woodShape.addChild(currCellRow.cellRowShape);
+     }
    }
    
    public void setCurrCell(Cell c)
@@ -55,6 +69,10 @@ class ModelManager
    
    public void addCurrCellToCellRow()
    {
+     
+     println("currCellRow tanXLen==>"+currCellRow.tanXLen);
+     println("currCellRow radZLen==>"+currCellRow.radZLen);
+     println("currCellRow longYLen==>"+currCellRow.longYLen);
      currCellRow.cellList.add(currCell);
      currCellRow.cellRowShape.addChild(currCell.cellShape);
    }

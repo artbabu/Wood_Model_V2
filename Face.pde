@@ -81,21 +81,7 @@ PShape drawFace(PShape face,PVector c1, PVector c2, PVector c3, PVector c4,color
      face.endShape();
      return face;
 }
-public void setFaceWeight(Float tanLen,Float radLen,String cellType)
-  {
-   
-    if(cellType.equals("EARLY_WOOD"))
-      {
-        maxTanZFaceWeight = tanLen / 4 ;
-        maxRadXFaceWeight = radLen / 4 ;
-      }
-     else if(cellType.equals("LATE_WOOD"))
-     {
-       maxTanZFaceWeight = tanLen / 3 ;
-       maxRadXFaceWeight = radLen / 3 ;
-     }
-     
-  }
+
 
  public PVector getV11CoordinatesForFace()
    {
@@ -232,5 +218,20 @@ public void setFaceWeight(Float tanLen,Float radLen,String cellType)
      }
      return v;
    }
+    public void setFaceWeight(Float tanLen,Float radLen,String cellType)
+  {
+   
+    if(cellType.equals("EARLY_WOOD"))
+      {
+        maxTanZFaceWeight = tanLen / 7 ;
+        maxRadXFaceWeight = radLen / 7 ;
+      }
+     else if(cellType.equals("LATE_WOOD"))
+     {
+       maxTanZFaceWeight = tanLen / 5 ;
+       maxRadXFaceWeight = radLen / 5 ;
+     }
+     
+  }
    
 }
