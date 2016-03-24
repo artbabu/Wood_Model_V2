@@ -1,14 +1,16 @@
 class Wood
 {
   PShape woodShape ;
-  PVector startVector ;
-  PVector endVector ; 
+  PVector b1Vector ;
+  PVector b2Vector ;
+  PVector b3Vector ;
+  PVector b4Vector ;
   
   List<CellRow> cellRowList ;
 
   public Wood(String production)
   {
-    startVector = new PVector(0,0,0);
+    b1Vector = new PVector(0,0,0);
     
     cellRowList = new ArrayList();
     
@@ -25,9 +27,29 @@ class Wood
      ModelManager mu = new ModelManager(this);
       
      mu.parseGrammar(production);
-      
+     
+      setCoordinatesOfWood();
      //LUT.initialize();
   }
+  public void setCoordinatesOfWood()
+  { 
+    // b1 and b2 from 1 st cell row
+     
+     CellRow cellRow = cellRowList.get(0);
+     
+     b1Vector = cellRow.startVector;
+     b2Vector = cellRow.endVector;
+    
+    //b3 and b4 from last cell row
+    
+     cellRow = cellRowList.get(cellRowList.size());
+     
+     
+     b3Vector = cellRow.startVector;
+     b4Vector = cellRow.endVector;
+    
+  }
+  
   
   public void addSubStuctureWood(CellRow cellRow)
   {

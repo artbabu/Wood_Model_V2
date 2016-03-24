@@ -45,9 +45,9 @@ void draw() {
 void setupGrammar(PApplet pthis) {
   
   grammar = new SimpleGrammar(pthis, "W");   // this only required to allow applet to call dispose()
-  grammar.addRule('W', "L^L^L^E^E^E^E^E^E^E");
-  grammar.addRule('E', "[rB+B+B+B+B+B+B+Br]");
-  grammar.addRule('L', "[rS+S+S+S+S+S+S+Sr]");
+  grammar.addRule('W', "[rLr]^[rLr]^[rLr]^[rEr]^[rEr]^[rEr]^[rEr]^[rEr]^[rEr]^[rEr]^W");
+  grammar.addRule('E', "BBBBBBBBBBBB");
+  grammar.addRule('L', "SSSSSSSS");
   grammar.addRule('B', "cF(+e)F(+o)F(-e)F(-o)c");
   grammar.addRule('S', "cG(+e)G(+o)G(-e)G(-o)c");
  production = grammar.generateGrammar(depth);

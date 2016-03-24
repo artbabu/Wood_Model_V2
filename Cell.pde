@@ -1,11 +1,10 @@
 class Cell
 {
-  
-  float tanXLen = 25 ; // incre in x direction
-  float radZLen = 25 ; // incre in z direction
-  float longYLen = 250;
-  
+ 
   PShape cellShape ; 
+  
+  CellRow cellRow ;
+  
   
   String cellType ;
   
@@ -21,8 +20,9 @@ class Cell
   boolean isRay = false ;
   boolean isTracheid = false ;
   
-  public Cell()
+  public Cell(CellRow cellRow)
   {
+    this.cellRow = cellRow ;
     cellShape = createShape(GROUP);
     
   }
@@ -42,7 +42,7 @@ class Cell
       
       currFace = new Face(v1,v2,v3,v4,faceType);
       
-      currFace.setFaceWeight(tanXLen,radZLen,cellType);
+      currFace.setFaceWeight(cellRow.tanXLen,cellRow.radZLen,cellType);
       
       currFace.buildFace();
       
@@ -58,28 +58,28 @@ class Cell
      
      if(faceType.equals("+e"))
      {
-       v.x = startVector.x + tanXLen ;
-       v.y = startVector.y + longYLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
+       v.y = startVector.y + cellRow.longYLen ;
        v.z = startVector.z + 0 ;
      }
      else if(faceType.equals("+o"))
      {
-       v.x = startVector.x + tanXLen ;
-       v.y = startVector.y + longYLen ;
-       v.z = startVector.z + radZLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
+       v.y = startVector.y + cellRow.longYLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-e"))
      {
        v.x = startVector.x + 0 ;
-       v.y = startVector.y + longYLen ;
-       v.z = startVector.z + radZLen ;
+       v.y = startVector.y + cellRow.longYLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-o"))
      {
        v.x = startVector.x + 0 ;
-       v.y = startVector.y + longYLen ;
+       v.y = startVector.y + cellRow.longYLen ;
        v.z = startVector.z + 0 ;
        
      }
@@ -92,22 +92,22 @@ class Cell
      
      if(faceType.equals("+e"))
      {
-       v.x = startVector.x + tanXLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
        v.y = startVector.y + 0 ;
        v.z = startVector.z + 0 ;
      }
      else if(faceType.equals("+o"))
      {
-       v.x = startVector.x + tanXLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
        v.y = startVector.y + 0 ;
-       v.z = startVector.z + radZLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-e"))
      {
        v.x = startVector.x + 0 ;
        v.y = startVector.y + 0 ;
-       v.z = startVector.z + radZLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-o"))
@@ -126,15 +126,15 @@ class Cell
      
      if(faceType.equals("+e"))
      {
-       v.x = startVector.x + tanXLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
        v.y = startVector.y + 0 ;
-       v.z = startVector.z + radZLen ;
+       v.z = startVector.z + cellRow.radZLen ;
      }
      else if(faceType.equals("+o"))
      {
        v.x = startVector.x + 0 ;
        v.y = startVector.y + 0 ;
-       v.z = startVector.z + radZLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-e"))
@@ -146,7 +146,7 @@ class Cell
      }
      else if(faceType.equals("-o"))
      {
-       v.x = startVector.x + tanXLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
        v.y = startVector.y + 0 ;
        v.z = startVector.z + 0 ;
        
@@ -160,28 +160,28 @@ class Cell
      
      if(faceType.equals("+e"))
      {
-       v.x = startVector.x + tanXLen ;
-       v.y = startVector.y + longYLen ;
-       v.z = startVector.z + radZLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
+       v.y = startVector.y + cellRow.longYLen ;
+       v.z = startVector.z + cellRow.radZLen ;
      }
      else if(faceType.equals("+o"))
      {
        v.x = startVector.x + 0 ;
-       v.y = startVector.y + longYLen ;
-       v.z = startVector.z + radZLen ;
+       v.y = startVector.y + cellRow.longYLen ;
+       v.z = startVector.z + cellRow.radZLen ;
        
      }
      else if(faceType.equals("-e"))
      {
        v.x = startVector.x + 0 ;
-       v.y = startVector.y + longYLen ;
+       v.y = startVector.y + cellRow.longYLen ;
        v.z = startVector.z + 0 ;
        
      }
      else if(faceType.equals("-o"))
      {
-       v.x = startVector.x + tanXLen ;
-       v.y = startVector.y + longYLen ;
+       v.x = startVector.x + cellRow.tanXLen ;
+       v.y = startVector.y + cellRow. longYLen ;
        v.z = startVector.z + 0 ;
        
      }
