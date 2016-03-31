@@ -55,6 +55,7 @@ void draw() {
     Ball b = (Ball) balls.get(i);
     boolean reached = b.move(w);
     if(reached){
+      print("Raja");
       balls.remove(balls.indexOf(b));
     }
     popMatrix();
@@ -63,7 +64,7 @@ void draw() {
     
     for (int i = 0; i < numBalls; i++) {
       //balls[i] = new Ball(15);
-      balls.add(new Ball(10,memberid++));
+      balls.add(new Ball(1,memberid++));
     }
   }
   
