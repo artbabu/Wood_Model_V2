@@ -75,6 +75,7 @@ void setupGrammar(PApplet pthis) {
   grammar.addRule('W', "L^L^L^L^L^E^E^E^E^E");
   grammar.addRule('E', "[rB+B+B+B+B+B+B+Br]");
   grammar.addRule('L', "[rS+S+S+S+S+S+S+Sr]");
+
   grammar.addRule('B', "cF(+e)F(+o)F(-e)F(-o)c");
   grammar.addRule('S', "cG(+e)G(+o)G(-e)G(-o)c");
  production = grammar.generateGrammar(depth);

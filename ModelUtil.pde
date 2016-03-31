@@ -7,8 +7,15 @@ class ModelUtil
    PVector rowVector = new PVector(0,0,0);
 
    boolean isCellRowActive = false ;
+   
+  // float prevECRRadZLen = 20 ;
+  // float prevLCRRadZLen = 25 ;
+  
+   float prevECRTanXLen = 10 ;
+   float prevLCRTanxLen = 15 ;  
   
    boolean  isCellActive = false ;
+   
  
  public void executeForLiteral(char c , ModelManager mm )
  {
@@ -19,19 +26,21 @@ class ModelUtil
                 {
                   if(!isCellRowActive)
                     {
+                      mm.cellRowCount ++ ;
                       isCellRowActive = true ;
                       
                       CellRow cr =  new CellRow();
                       
                       colVector = rowVector;
                       cr.setStartVector(colVector);
-                     // rowVector = new PVector(rowVector.x,rowVector.y,rowVector.z+(mm.radXLen)); // updating row vector for next row.
+                      cr.id = mm.cellRowCount ;
                       
                       mm.setCurrCellRow(cr);
                       
                     }
                   else
                     {
+                     
                       mm.addCurrCellRowToWood(colVector);
                       isCellRowActive = false;
                     }   
@@ -44,9 +53,9 @@ class ModelUtil
                     {
                       isCellActive = true ;
                       
-                      Cell cell =  new Cell();
+                      Cell cell =  new Cell(mm.currCellRow);
                       cell.setStartVector(colVector);
-                      //colVector = new PVector(colVector.x+(mm.tanLen),colVector.y,colVector.z); // updating row vector for next col in a row.
+                      colVector = new PVector(colVector.x + mm.currCellRow.tanXLen,colVector.y,colVector.z); // updating row vector for next col in a row.
                       
                       mm.setCurrCell(cell);
                       
@@ -63,7 +72,19 @@ class ModelUtil
                   if(isCellActive)
                   {
                     if(mm.currCell.cellType == null)
-                       mm.currCell.cellType = "EARLY_WOOD";   
+                       mm.currCell.cellType = "EARLY_WOOD";
+                       
+                     //if(mm.currCellRow.radZLen == 0)
+                     // {
+                    //    prevECRRadZLen = mm.currCellRow.calculateRadZLen(prevECRRadZLen,mm.maxERadZLen,mm.cellRowCount,"EARLY_WOOD");
+                    //    rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + prevECRRadZLen); // updating row vector for next row.
+                     // }
+                      
+                        if(mm.currCellRow.tanXLen == 0)
+                       {
+                          prevECRTanXLen = mm.currCellRow.calculateTanXLen(prevECRTanXLen,mm.maxETanXLen,mm.cellRowCount,"EARLY_WOOD");
+                          rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + prevECRTanXLen); // updating row vector for next row.
+                       } 
                  
                     mm.createFaceForCell();
                   }
@@ -76,6 +97,18 @@ class ModelUtil
                   {
                     if(mm.currCell.cellType == null)
                        mm.currCell.cellType = "LATE_WOOD";   
+                   
+                    //if(mm.currCellRow.radZLen == 0)
+                    //  {
+                     //   prevLCRRadZLen = mm.currCellRow.calculateRadZLen(prevLCRRadZLen,mm.maxLRadZLen,mm.cellRowCount,"LATE_WOOD");
+                    //    rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + prevLCRRadZLen); // updating row vector for next row.
+                     // }
+                      
+                    if(mm.currCellRow.tanXLen == 0)
+                      {
+                       prevECRTanXLen = mm.currCellRow.calculateTanXLen(prevECRTanXLen,mm.maxLTanXLen,mm.cellRowCount,"LATE_WOOD");
+                       rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + prevECRTanXLen); // updating row vector for next row.
+                      }  
                  
                     mm.createFaceForCell();
                   }
@@ -117,59 +150,59 @@ class ModelUtil
         case '+': // tangential change - forward i.e x = x + c
                 {
                   if(!isCellActive)
-                    colVector = new PVector(colVector.x + mm.tanXLen,colVector.y,colVector.z);
+                  //  colVector = new PVector(colVector.x + mm.tanXLen,colVector.y,colVector.z);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x + mm.tanXLen,rowVector.y,rowVector.z);
+                    rowVector = new PVector(rowVector.x + mm.currCellRow.tanXLen,rowVector.y,rowVector.z);
                   break ;
                   
                 }
         case '-':// tangential change - backward i.e x = x - c
                 {
                   if(!isCellActive)
-                    colVector = new PVector(colVector.x - mm.tanXLen,colVector.y,colVector.z);
+                    colVector = new PVector(colVector.x - mm.currCellRow.tanXLen,colVector.y,colVector.z);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x - mm.tanXLen,rowVector.y,rowVector.z);
+                    rowVector = new PVector(rowVector.x - mm.currCellRow.tanXLen,rowVector.y,rowVector.z);
                   break ;
                 }
         case '>': // longitudinal change - forward i.e y = y + c
                 {
                    if(!isCellActive)
-                    colVector = new PVector(colVector.x ,colVector.y + mm.longYLen,colVector.z);
+                    colVector = new PVector(colVector.x ,colVector.y + mm.currCellRow.longYLen,colVector.z);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x ,rowVector.y + mm.longYLen,rowVector.z);
+                    rowVector = new PVector(rowVector.x ,rowVector.y + mm.currCellRow.longYLen,rowVector.z);
                   
                   break; 
                 }
         case '<':  // longitudinal change - backward i.e y = y - c
                 {
                    if(!isCellActive)
-                    colVector = new PVector(colVector.x ,colVector.y - mm.longYLen,colVector.z);
+                    colVector = new PVector(colVector.x ,colVector.y - mm.currCellRow.longYLen,colVector.z);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x ,rowVector.y - mm.longYLen,rowVector.z);
+                    rowVector = new PVector(rowVector.x ,rowVector.y - mm.currCellRow.longYLen,rowVector.z);
                   
                   break; 
                 }
         case '^':  // radial change - forward i.e z = z + c
                 {
                   if(!isCellActive)
-                    colVector = new PVector(colVector.x ,colVector.y ,colVector.z + mm.radZLen);
+                    colVector = new PVector(colVector.x ,colVector.y ,colVector.z + mm.currCellRow.radZLen);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + mm.radZLen);
+                    //rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z + mm.radZLen);
                   
                   break; 
                 }
         case '&': // radial change - backward i.e z = z - c
                 {
                  if(!isCellActive)
-                    colVector = new PVector(colVector.x ,colVector.y ,colVector.z - mm.radZLen);
+                    colVector = new PVector(colVector.x ,colVector.y ,colVector.z - mm.currCellRow.radZLen);
                   
                   if(!isCellRowActive)  
-                    rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z - mm.radZLen);
+                    rowVector = new PVector(rowVector.x ,rowVector.y ,rowVector.z - mm.currCellRow.radZLen);
                   
                   break; 
                 }
