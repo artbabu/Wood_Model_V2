@@ -42,7 +42,9 @@ class Wood
     
     //b3 and b4 from last cell row
     
-     cellRow = cellRowList.get(cellRowList.size());
+
+     cellRow = cellRowList.get(cellRowList.size()-1);
+
      
      
      b3Vector = cellRow.startVector;
