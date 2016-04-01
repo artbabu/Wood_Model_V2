@@ -24,8 +24,8 @@ class ModelManager
 
    public ModelManager(Wood wood)
    {
-     tanXLen = 20 ; // incre in x direction
-     radZLen = 20 ; // incre in z direction
+     tanXLen = 25 ; // incre in x direction
+     radZLen = 25 ; // incre in z direction
      longYLen = 250;
      currWood = wood ;
      mu = new ModelUtil();

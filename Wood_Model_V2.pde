@@ -17,7 +17,7 @@ String production = "";
 Grammar grammar ;
 Wood w ;
 int depth = 3;
-int numBalls = 1;
+int numBalls = 15;
 int ballSize = 10;
 static int memberid = 0;
 ArrayList balls = new ArrayList();
@@ -49,7 +49,7 @@ void setup() {
   yMin = 0;
   yMax = 250;
   zMin = 0;
-  zMax = 250;
+  zMax = 200;
   
   cam = new PeasyCam(this,0,0,0,1500); 
   for (int i = 0; i < numBalls; i++) {
