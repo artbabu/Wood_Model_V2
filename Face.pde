@@ -38,34 +38,38 @@ class Face
   this.v44 = getV44CoordinatesForFace();
         
   PShape face = createShape();
-  face = drawFace(face,v1,v2,v3,v4,brown,true);
+  face = drawFace(face,v1,v2,v3,v4,brown,true,true);
+  faceShape.addChild(face);
+  
+  
+  
+  face = createShape();
+  face = drawFace(face,v11,v22,v33,v44,darkBrown,false,true); 
   faceShape.addChild(face);
   
   face = createShape();
-  face = drawFace(face,v11,v22,v33,v44,darkBrown,false); 
+  face = drawFace(face,v1,v2,v22,v11,brown,false,false);
   faceShape.addChild(face);
   
   face = createShape();
-  face = drawFace(face,v1,v2,v22,v11,brown,false);
-  faceShape.addChild(face);
-  
-  face = createShape();
- face = drawFace(face,v2,v3,v33,v22,brown,false);
+ face = drawFace(face,v2,v3,v33,v22,brown,false,false);
  faceShape.addChild(face);
  
  face = createShape();
-  face = drawFace(face,v3,v33,v44,v4,brown,false);
+  face = drawFace(face,v3,v33,v44,v4,brown,false,false);
   faceShape.addChild(face);
   
   face = createShape();
- face = drawFace(face,v1,v11,v44,v4,brown,false);
+ face = drawFace(face,v1,v11,v44,v4,brown,false,false);
  faceShape.addChild(face);
   
 }
 
-PShape drawFace(PShape face,PVector c1, PVector c2, PVector c3, PVector c4,color c,boolean isStrokeActive)
+PShape drawFace(PShape face,PVector c1, PVector c2, PVector c3, PVector c4,color c,boolean isStrokeActive,boolean isPorusFace)
 { 
    face.beginShape(POLYGON);
+   
+   
    face.fill(c);
    if(isStrokeActive)
     {
@@ -78,6 +82,12 @@ PShape drawFace(PShape face,PVector c1, PVector c2, PVector c3, PVector c4,color
      face.vertex(c2.x, c2.y, c2.z);
      face.vertex(c3.x, c3.y, c3.z);
      face.vertex(c4.x, c4.y, c4.z);
+     
+     if(isPorusFace)
+   {
+    if( faceType.equals("-o") || faceType.equals("+o"))
+    insertPorousintoRadialWall(face,c1,c2,c3);
+   }
      face.endShape();
      return face;
 }
@@ -86,42 +96,95 @@ public void setFaceWeight(Float tanLen,Float radLen,String cellType)
    
     if(cellType.equals("EARLY_WOOD"))
       {
-        maxTanZFaceWeight = tanLen / 4 ;
-        maxRadXFaceWeight = radLen / 4 ;
+        maxTanZFaceWeight = tanLen / 5 ;
+        maxRadXFaceWeight = radLen / 6 ;
       }
      else if(cellType.equals("LATE_WOOD"))
      {
-       maxTanZFaceWeight = tanLen / 3 ;
-       maxRadXFaceWeight = radLen / 3 ;
+       maxTanZFaceWeight = tanLen / 4 ;
+       maxRadXFaceWeight = radLen / 4 ;
      }
      
   }
+  /*
+   Since the porous are inserted radial face , x = const , minY = v2.y maxY = v1.y, minZ = v2.z , maxZ = v3.z
+   if its tangential face Z would have been constant.
+  */
+void insertPorousintoRadialWall(PShape cellWall,PVector v1,PVector v2,PVector v3)
+{
+  
+   int holeRes = 50 ;                        // no of face to construct circle
+  float holeRad = maxRadXFaceWeight * 0.50; // 25 % of cell face 
+  
+  float x = v1.x;
+  float maxY = v1.y ;
+  float minY = v2.y ;
+  float maxZ ;
+  float minZ  ;
+  println(""+v2.z,v3.z);
+  if(faceType.equals("-o") )
+  {
+     maxZ = v3.z - holeRad;
+     minZ = v2.z + holeRad ;
+  }
+  else
+  {
+    maxZ = v2.z - holeRad;
+    minZ = v3.z + holeRad ;
+  } 
+ 
+ 
+   
+  float incY = maxY / 10 ;
+    float py = minY + incY ;
+    float pz = minZ + ((maxZ - minZ) / 2) ;
+    //float pz = (minZ,maxZ);
+ while( py < (maxY - incY) )
+ {
+    println(" points ==>"+py,pz);
+   cellWall.beginContour();
+    //println("*****************************************************************************");
+  for(int i = 0 ; i < holeRes;i++)
+  {
+   
+   float angle = TWO_PI  * i / holeRes;
+   float cz =  pz + sin(  angle ) * (holeRad);
+   float cy = py + cos(  angle  ) * (holeRad);
+   cellWall.vertex( x + 1, cy,cz);
+  
+  }
+  // println("*****************************************************************************");
+  cellWall.endContour();
+  py = py + incY ;
+ }
+  
+}
 
  public PVector getV11CoordinatesForFace()
    {
      PVector v = new PVector();
      
-     if(faceType.equals("+e"))
+     if(faceType.equals("-o"))
      {
        v.x = v1.x - maxRadXFaceWeight ;
        v.y = v1.y;
        v.z = v1.z  ;
      }
-     else if(faceType.equals("+o"))
+     else if(faceType.equals("-e"))
      {
        v.x = v1.x  ;
        v.y = v1.y;
        v.z = v1.z - maxTanZFaceWeight ;
        
      }
-     else if(faceType.equals("-e"))
+     else if(faceType.equals("+o"))
      {
       v.x = v1.x +  maxRadXFaceWeight ;
        v.y = v1.y;
        v.z = v1.z  ;
        
      }
-     else if(faceType.equals("-o"))
+     else if(faceType.equals("+e"))
      {
        v.x = v1.x  ;
        v.y = v1.y;
@@ -135,27 +198,27 @@ public void setFaceWeight(Float tanLen,Float radLen,String cellType)
    {
      PVector v = new PVector();
      
-     if(faceType.equals("+e"))
+     if(faceType.equals("-o"))
      {
        v.x = v2.x - maxRadXFaceWeight ;
        v.y = v2.y;
        v.z = v2.z  ;
      }
-     else if(faceType.equals("+o"))
+     else if(faceType.equals("-e"))
      {
        v.x = v2.x  ;
        v.y = v2.y;
        v.z = v2.z - maxTanZFaceWeight ;
        
      }
-     else if(faceType.equals("-e"))
+     else if(faceType.equals("+o"))
      {
       v.x = v2.x +  maxRadXFaceWeight ;
        v.y = v2.y;
        v.z = v2.z  ;
        
      }
-     else if(faceType.equals("-o"))
+     else if(faceType.equals("+e"))
      {
        v.x = v2.x  ;
        v.y = v2.y;
@@ -169,27 +232,27 @@ public void setFaceWeight(Float tanLen,Float radLen,String cellType)
    {
    PVector v = new PVector();
      
-     if(faceType.equals("+e"))
+     if(faceType.equals("-o"))
      {
        v.x = v3.x - maxRadXFaceWeight ;
        v.y = v3.y;
        v.z = v3.z  ;
      }
-     else if(faceType.equals("+o"))
+     else if(faceType.equals("-e"))
      {
        v.x = v3.x  ;
        v.y = v3.y;
        v.z = v3.z - maxTanZFaceWeight ;
        
      }
-     else if(faceType.equals("-e"))
+     else if(faceType.equals("+o"))
      {
       v.x = v3.x +  maxRadXFaceWeight ;
        v.y = v3.y;
        v.z = v3.z  ;
        
      }
-     else if(faceType.equals("-o"))
+     else if(faceType.equals("+e"))
      {
        v.x = v3.x  ;
        v.y = v3.y;
@@ -203,27 +266,27 @@ public void setFaceWeight(Float tanLen,Float radLen,String cellType)
    {
      PVector v = new PVector();
      
-     if(faceType.equals("+e"))
+     if(faceType.equals("-o"))
      {
        v.x = v4.x - maxRadXFaceWeight ;
        v.y = v4.y;
        v.z = v4.z  ;
      }
-     else if(faceType.equals("+o"))
+     else if(faceType.equals("-e"))
      {
        v.x = v4.x  ;
        v.y = v4.y;
        v.z = v4.z - maxTanZFaceWeight ;
        
      }
-     else if(faceType.equals("-e"))
+     else if(faceType.equals("+o"))
      {
       v.x = v4.x +  maxRadXFaceWeight ;
        v.y = v4.y;
        v.z = v4.z  ;
        
      }
-     else if(faceType.equals("-o"))
+     else if(faceType.equals("+e"))
      {
        v.x = v4.x  ;
        v.y = v4.y;
