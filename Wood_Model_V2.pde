@@ -17,9 +17,16 @@ String production = "";
 Grammar grammar ;
 Wood w ;
 int depth = 3;
-int numBalls = 100;
+int numBalls = 1;
+int ballSize = 10;
 static int memberid = 0;
 ArrayList balls = new ArrayList();
+float xMax;
+float xMin;
+float yMin;
+float yMax;
+float zMin;
+float zMax;
 
 //PVector end = new PVector(endX, endY, endZ);
  
@@ -34,11 +41,20 @@ void setup() {
 
   setupGrammar(this);
   w = new Wood(production);
-
+  float[] xArray = {w.b1Vector.x, w.b2Vector.x, w.b3Vector.x, w.b3Vector.x, w.b4Vector.x};
+  float[] yArray = {w.b1Vector.y, w.b2Vector.y, w.b3Vector.y, w.b3Vector.y, w.b4Vector.y};
+  float[] zArray = {w.b1Vector.z, w.b2Vector.z, w.b3Vector.z, w.b3Vector.z, w.b4Vector.z};
+  xMin = 0;
+  xMax = 200;
+  yMin = 0;
+  yMax = 250;
+  zMin = 0;
+  zMax = 250;
+  
   cam = new PeasyCam(this,0,0,0,1500); 
   for (int i = 0; i < numBalls; i++) {
     //balls[i] = new Ball(15);
-    balls.add(new Ball(1,memberid++));
+    balls.add(new Ball(ballSize,memberid++));
   }
    
 }
@@ -55,8 +71,8 @@ void draw() {
     Ball b = (Ball) balls.get(i);
     boolean reached = b.move(w);
     if(reached){
-      print("Raja");
-      balls.remove(balls.indexOf(b));
+      //print("Raja");
+      //balls.remove(balls.indexOf(b));
     }
     popMatrix();
   }
@@ -69,7 +85,14 @@ void draw() {
   }
   
 }
- 
+ void keyPressed() {
+  if(key == 's'){
+    noLoop();
+  }else if(key == 'a'){
+    loop();
+  }
+}
+
 void setupGrammar(PApplet pthis) {
   
   grammar = new SimpleGrammar(pthis, "W");   // this only required to allow applet to call dispose()
@@ -83,10 +106,4 @@ void setupGrammar(PApplet pthis) {
   if (depth > 0) {
     //distance *= 1/(pow(2, depth) - 1);
   }
-}
-
-void mousePressed(){
-  //endX = mouseX;
-  //endY = mouseY;
- 
 }

@@ -32,6 +32,7 @@ class ModelUtil
                     }
                   else
                     {
+                      colVector.x = colVector.x + mm.tanXLen;
                       mm.addCurrCellRowToWood(colVector);
                       isCellRowActive = false;
                     }   

@@ -28,8 +28,8 @@ class Ball{
   float step = 0.01;    // Size of each step along the path
   float pct = 0.0;      // Percentage traveled (0.0 to 1.0)
   float endX;   // Final x-coordinate
-float endY;// Final y-coordinate
-float endZ;    // Final z-coordinate
+  float endY;// Final y-coordinate
+  float endZ;    // Final z-coordinate
 
   Ball(int r, int id){
     //beginX = -500;
@@ -38,10 +38,11 @@ float endZ;    // Final z-coordinate
     beginX = random(-800, 800);
     beginY = random(-800, 800);
     beginZ = random(-800, 800);
-    endX = random(-500, 500);
-    endY = random(-500, 500);
-    endZ = random(-500, 500);
-    ballid = id;;
+   
+    endX = 20;
+    endY = 150;
+    endZ = 150;
+    ballid = id;
     radius = r;
     location.x = beginX ;
     location.y = beginY ;
@@ -49,14 +50,14 @@ float endZ;    // Final z-coordinate
   }
   
   boolean move(Wood w){
+
     //endX = random(-500, 500);
     //endY = random(-500, 500);
     //endZ = random(-500, 500);
     // inital ball set up
-    print(w.b1Vector);
-    print(w.b2Vector);
-    print(w.b3Vector);
-    print(w.b4Vector);
+    if(location.x  >= xMin - radius && location.x <= xMax + radius && location.y >= yMin - radius && location.y <= yMax + radius  && location.z >= zMin - radius && location.z <= zMax + radius){
+      pct = 1.0;
+    }
     distX = endX - beginX;
     distY = endY - beginY;
     distZ = endZ - beginZ;

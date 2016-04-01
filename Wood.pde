@@ -63,10 +63,10 @@ class Wood
   {
     shape(woodShape);
     
-    println(" b1Vector ====>"+b1Vector.x,b1Vector.y,b1Vector.z);
-    println(" b2Vector ====>"+b2Vector.x,b2Vector.y,b2Vector.z);
-    println(" b3Vector ====>"+b3Vector.x,b3Vector.y,b3Vector.z);
-    println(" b4Vector ====>"+b4Vector.x,b4Vector.y,b4Vector.z);
+    //println(" b1Vector ====>"+b1Vector.x,b1Vector.y,b1Vector.z);
+    //println(" b2Vector ====>"+b2Vector.x,b2Vector.y,b2Vector.z);
+    //println(" b3Vector ====>"+b3Vector.x,b3Vector.y,b3Vector.z);
+    //println(" b4Vector ====>"+b4Vector.x,b4Vector.y,b4Vector.z);
     
     
   }
