@@ -53,10 +53,6 @@ float endZ;    // Final z-coordinate
     //endY = random(-500, 500);
     //endZ = random(-500, 500);
     // inital ball set up
-    print(w.b1Vector);
-    print(w.b2Vector);
-    print(w.b3Vector);
-    print(w.b4Vector);
     distX = endX - beginX;
     distY = endY - beginY;
     distZ = endZ - beginZ;

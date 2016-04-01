@@ -55,7 +55,7 @@ void draw() {
     Ball b = (Ball) balls.get(i);
     boolean reached = b.move(w);
     if(reached){
-      print("Raja");
+     // print("Raja");
       balls.remove(balls.indexOf(b));
     }
     popMatrix();
@@ -73,11 +73,11 @@ void draw() {
 void setupGrammar(PApplet pthis) {
   
   grammar = new SimpleGrammar(pthis, "W");   // this only required to allow applet to call dispose()
-  grammar.addRule('W', "L^L^L^L^L^E^E^E^E^E");
-  grammar.addRule('E', "[rB+B+B+B+B+B+B+Br]");
-  grammar.addRule('L', "[rS+S+S+S+S+S+S+Sr]");
-  grammar.addRule('B', "cF(+e)F(+o)F(-e)F(-o)c");
-  grammar.addRule('S', "cG(+e)G(+o)G(-e)G(-o)c");
+  grammar.addRule('W', "[L^L^L^E^E^E^E^E]");
+  grammar.addRule('E', "rB+B+B+B+B+B+B+Br");
+  grammar.addRule('L', "rS+S+S+S+S+S+S+Sr");
+  grammar.addRule('B', "cF(-o)F(-e)F(+o)F(+e)c");
+  grammar.addRule('S', "cG(-o)G(-e)G(+o)G(+e)c");
  production = grammar.generateGrammar(depth);
  println(" prod ===>"+production);
   if (depth > 0) {

@@ -6,19 +6,27 @@ class ModelManager
    Cell currCell ;
    Face currFace ;
    
+   float maxTanXLen = 80 ; // incre in x direction
+   float maxRadZLen = 80; // incre in z direction
+   float maxLongYLen ;
+   
+   
    Wood currWood;
    
    ModelUtil mu ;
    
-   float tanXLen = 25 ; // incre in x direction
-   float radZLen = 25 ; // incre in z direction
-   float longYLen = 250;
+   float tanXLen ; // incre in x direction
+   float radZLen ; // incre in z direction
+   float longYLen ;
   
     char[] csArray ;
     int currPos = 0 ;
 
    public ModelManager(Wood wood)
    {
+     tanXLen = 20 ; // incre in x direction
+     radZLen = 20 ; // incre in z direction
+     longYLen = 250;
      currWood = wood ;
      mu = new ModelUtil();
    }
@@ -38,7 +46,17 @@ class ModelManager
    
    public void setCurrCellRow(CellRow cr)
    {
+     //incrementCellDimension();
      currCellRow = cr ;
+   }
+   
+   public void incrementCellDimension()
+   {
+     if((tanXLen + 5) <  maxTanXLen)
+      tanXLen = tanXLen + 3 ;
+     if((radZLen + 5) <  maxRadZLen)
+       radZLen = radZLen + 2 ;
+       
    }
    
    public void addCurrCellRowToWood(PVector endColVec)
@@ -50,6 +68,9 @@ class ModelManager
    
    public void setCurrCell(Cell c)
    {
+     c.tanXLen = tanXLen ;
+     c.radZLen = radZLen ;
+     c.longYLen = longYLen ;
      currCell = c ;
    }
    
