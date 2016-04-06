@@ -26,8 +26,8 @@ class WoodMoveTracker
   // Formula Req
   
   final float  FSP = 0.28 ; // fiber saturation point [ Constant ]
-  final float SFR = 0.22 ; // shrinkage factor  - Radial
-  final float SFT = 0.37 ; // shrinkage factor - Tangential
+  final float SFR = 0.20 ; // shrinkage factor  - Radial - 4.1 percent
+  final float SFT = 0.34 ; // shrinkage factor - Tangential - 6.8 percent
   
    List<String> faceTypeOrder = new ArrayList<String>()
   {
