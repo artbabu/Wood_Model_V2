@@ -30,63 +30,64 @@ class WoodMoveTracker
   final float SFT = 0.34 ; // shrinkage factor - Tangential - 6.8 percent
   
    List<String> faceTypeOrder = new ArrayList<String>()
-  {
-    {
-      //tem
-     // order of cell wall as per in grammar
-     add("-o");
-     add("-e");
-     add("+o");
-     add("+e");
-    }
-  };
+   {
+     {
+        //tem
+       // order of cell wall as per in grammar
+        add("-o");
+       add("-e");
+       add("+o");
+       add("+e");
+     }
+   };
   
   Map<Float,Float> rhEmcMapping = new HashMap<Float,Float>(){
-   {
-     put(0.0,0.0);
-     put(0.25,0.05);
-     put(0.50,0.09);
-     put(0.75,0.14);
-     put(1.00,0.28);
-   }  
+    {
+      
+      put(0.0,0.0);
+      put(0.25,0.05);
+      put(0.50,0.09);
+      put(0.75,0.14);
+      put(1.00,0.28);
+    }  
   };
   public WoodMoveTracker(Wood wood)
   {
-    this.prevRH = 0.0;
-    this.prevAirMC = 0.0;
-    this.woodMC = 0.0;
-    this.wood = wood ;
+     this.prevRH = 0.0;
+     this.prevAirMC = 0.0;
+     this.woodMC = 0.0;
+     this.wood = wood ;
   }
   
   public void triggerRHChange(float rh)
   {
-    prevTanX = 0;
-    prevRadZ = 0;
+     prevTanX = 0;
+     prevRadZ = 0;
     
-    prevRH = currRH;
-    prevAirMC = currAirMC;
-    woodMC = prevAirMC ;
-    currRH = rh;
-    for(Map.Entry<Float,Float> en : rhEmcMapping.entrySet())
-    {
-     if( currRH <= en.getKey())
+     prevRH = currRH;
+     prevAirMC = currAirMC;
+     woodMC = prevAirMC ;
+     currRH = rh;
+     for(Map.Entry<Float,Float> en : rhEmcMapping.entrySet())
      {
-       float upRH = en.getKey();
-       float upEMC = en.getValue();
+       if( currRH <= en.getKey())
+       {
+         float upRH = en.getKey();
+         float upEMC = en.getValue();
        
-       emc = (currRH * upEMC) / upRH ;
-       currAirMC = emc ;
-       break ;
-     }  
-    }
-   resetWoodCellSaturation();
+         emc = (currRH * upEMC) / upRH ;
+         currAirMC = emc ;
+         break ;
+       }  
+     }
+    resetWoodCellSaturation();
   }
   public void updateWoodModel(int firstRow , int lastRow,int colLayer)
   {
     if(prevRH < currRH)
-     initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,true);
+      initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,true);
     else
-     initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,false);
+      initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,false);
   }
   public void initWoodModelExpansionOrShrinkage(int firstRow,int lastRow,int colLayer,boolean isSwell)
   {
@@ -98,50 +99,39 @@ class WoodMoveTracker
     float currRadZ = 0;
     
     for(int i = 0 ; i < wood.cellRowList.size() ; i++)
-   { 
-     
-     //if(firstRow == i ||  lastRow == i)
-     // updateWholeRow = true ;
-     //else
-     // updateWholeRow = false ;
-     CellRow cr = wood.cellRowList.get(i);
+    {
+      
+      CellRow cr = wood.cellRowList.get(i);
                  
-     currTanX = calculateTanLenForExpandedCell(cr.cellList.get(0).tanXLen);
-     currRadZ = calculateRadLenForExpandedCell(cr.cellList.get(0).radZLen);
-     if(updateWholeRow )
-     {
-       for(int j = 0 ; j < cr.cellList.size() ; j++)
-       { 
-         
-         
-          Cell c = cr.cellList.get(j);
-          if(isSwell)
-          {
-           c.tanXLen += currTanX ;
-           c.radZLen += currRadZ ;
-          }
-          else
-          {
-           c.tanXLen -= currTanX ;
-           c.radZLen -= currRadZ ;
-          }
-          c.startVector = new PVector(prevTanX,0,prevRadZ);
-         updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
-         prevTanX += c.tanXLen; 
-         if( j == 0 )
-          cr.setStartVector(c.startVector);
-        else if(j == cr.cellList.size() - 1 )
-          cr.setEndVector( new PVector(prevTanX + c.tanXLen ,0,prevRadZ + c.radZLen ));
-          
-       }
-       
-         
+      currTanX = calculateTanLenForExpandedCell(cr.cellList.get(0).tanXLen);
+      currRadZ = calculateRadLenForExpandedCell(cr.cellList.get(0).radZLen);
+      if(updateWholeRow )
+      {
+        for(int j = 0 ; j < cr.cellList.size() ; j++)
+        { 
+           Cell c = cr.cellList.get(j);
+           if(isSwell)
+           {
+             c.tanXLen += currTanX ;
+             c.radZLen += currRadZ ;
+           }
+           else
+           {
+             c.tanXLen -= currTanX ;
+             c.radZLen -= currRadZ ;
+           }
+           c.startVector = new PVector(prevTanX,0,prevRadZ);
+           updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
+           prevTanX += c.tanXLen; 
+           if( j == 0 )
+             cr.setStartVector(c.startVector);
+           else if(j == cr.cellList.size() - 1 )
+             cr.setEndVector( new PVector(prevTanX + c.tanXLen ,0,prevRadZ + c.radZLen ));
+       }  
      }else
      {
-         for(int j = 0 ; j < cr.cellList.size() ; j++)
-       {
-           
-         
+       for(int j = 0 ; j < cr.cellList.size() ; j++)
+       {  
          Cell c = cr.cellList.get(j);
          if( j == colLayer || j == (cr.cellList.size() - colLayer - 1))
          {

@@ -106,66 +106,36 @@ void setup() {
  
 void draw() {
   drawCount++;
- 
+   
   background(20, 20, 200);
- 
+   
   rotateX(PI / 3);
   rotateY(PI / 3);
- 
- if( drawCount % 10 == 0)
- {
-  initateRHChange();
-  woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
- }
- 
-  // w.displayWood();
- //lights(); 
- stroke(255);
- for (int i=0; i < balls.size(); ++i) {
- pushMatrix();
- Ball b = (Ball) balls.get(i);
- int reached = b.move(w);
- if(reached == 1){
+   
+   if( drawCount % 10 == 0)
+   {
+     initateRHChange();
+     woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
+   }
+   
+   stroke(255);
+   for (int i=0; i < balls.size(); ++i) {
+   pushMatrix();
+   Ball b = (Ball) balls.get(i);
+   int reached = b.move(w);
+   if(reached == 1){
    ballHitCount ++;
-   //if(!emc)
-   //  balls.remove(b);
- }else if(reached == 3) {
+   }else if(reached == 3) {
      balls.remove(b);
- }  
- popMatrix();
- }
- if(balls.size() < numBalls){
+   }  
+   popMatrix();
+   }
+   if(balls.size() < numBalls){
    balls.add(new Ball(2,memberid++));
- }
- //println("reached ball ==>"+ballHitCount, drawCount);
-  //if( ballHitCount == rhList.get(rhCount) * numBalls)
-  //{
-  //  initateRHChange();
-  //  woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
-  //}
- //if(frontRow <= midRow)
- //{
-   //woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
-   //cellColLayer ++;
-   //frontRow++;
-   //lastRow --;
- //}
-//// 
- w.displayWood();
- //try{
- //Thread.sleep(1200);
- //}catch(Exception e)
- //{
- //}
+   }
+   w.displayWood();
 }
- //void keyPressed() {
- // if(key == 's'){
- //   noLoop();
- // }else if(key == 'a'){
- //   loop();
- // }
-//}
-
+ 
 public void initateRHChange()
 {
   if(!RHInc && currRH >= 0.10)
@@ -179,23 +149,10 @@ public void initateRHChange()
     RHInc = !RHInc;
     setup();
   }
-   //if(rhCount < (rhList.size()-1))
-   //  rhCount ++ ;
-  //else
-   //{
-   //  noLoop();
-   //  //setup();
-   //  //rhCount = 0;
-  //}
      
   println("********************trigger RH Change***********"+currRH);   
   woodMT.triggerRHChange(currRH);
-   //cellColLayer = 0;
-   //frontRow = 0;
-   //lastRow = rhList.size() - 1 ;
-   //midRow = lastRow / 2 ;
-   
-  
+
 }
 void setupGrammar(PApplet pthis) {
   
@@ -205,8 +162,8 @@ void setupGrammar(PApplet pthis) {
   grammar.addRule('L', "rS+S+S+S+S+S+S+Sr");
   grammar.addRule('B', "cF(-o)F(-e)F(+o)F(+e)c");
   grammar.addRule('S', "cG(-o)G(-e)G(+o)G(+e)c");
- production = grammar.generateGrammar(depth);
- println(" prod ===>"+production);
+  production = grammar.generateGrammar(depth);
+  println(" prod ===>"+production);
   if (depth > 0) {
     //distance *= 1/(pow(2, depth) - 1);
   }

@@ -10,11 +10,9 @@ class Wood
 
   public Wood(String production)
   {
-    b1Vector = new PVector(0,0,0);
-    
-    cellRowList = new ArrayList();
-    
-    woodShape = createShape(GROUP);
+     b1Vector = new PVector(0,0,0);
+     cellRowList = new ArrayList();
+     woodShape = createShape(GROUP);
   
      fill(191, 191, 191);
      ambient(122, 122, 122);
@@ -53,8 +51,6 @@ class Wood
   {
     
     cellRowList.add(cellRow);
-    
-    println(" wood child "+woodShape.getChildCount());
     woodShape.addChild(cellRow.cellRowShape);
   }
   
@@ -62,11 +58,6 @@ class Wood
   public void displayWood()
   {
     shape(woodShape);
-    
-    //println(" b1Vector ====>"+b1Vector.x,b1Vector.y,b1Vector.z);
-    //println(" b2Vector ====>"+b2Vector.x,b2Vector.y,b2Vector.z);
-    //println(" b3Vector ====>"+b3Vector.x,b3Vector.y,b3Vector.z);
-    //println(" b4Vector ====>"+b4Vector.x,b4Vector.y,b4Vector.z);
     
     
   }

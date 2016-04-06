@@ -46,7 +46,6 @@ class ModelManager
    
    public void setCurrCellRow(CellRow cr)
    {
-     //incrementCellDimension();
      currCellRow = cr ;
    }
    
