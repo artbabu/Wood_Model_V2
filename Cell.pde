@@ -16,10 +16,8 @@ class Cell
   float maxWid = maxLen / 10 ; // width = len / 100 ; hypo ==> width = len /10 ;
   
   
-   
   
-  boolean isRay = false ;
-  boolean isTracheid = false ;
+  boolean isSaturated = false ;
   
   public Cell()
   {
@@ -29,6 +27,7 @@ class Cell
   
   public void setStartVector(PVector startVector)
   {
+    println(" Main Start Vector "+ startVector );
     this.startVector = startVector ;
   }
   
@@ -45,10 +44,7 @@ class Cell
       currFace.setFaceWeight(tanXLen,radZLen,cellType);
       
       currFace.buildFace();
-      
-      cellShape.addChild(currFace.faceShape);
-      
-      
+        
       return currFace ;
    }
    
@@ -188,5 +184,15 @@ class Cell
      return v;
    }
    
+   public LinkedHashMap<String,PShape> getNewFaceMappingForUpdate()
+   {
+     LinkedHashMap<String,PShape> newFaceMapping = new LinkedHashMap<String,PShape>();
+     newFaceMapping.put("-o",constructFace("-o").faceShape);
+     newFaceMapping.put("-e",constructFace("-e").faceShape);
+     newFaceMapping.put("+o",constructFace("+o").faceShape);
+     newFaceMapping.put("+e",constructFace("+e").faceShape);
+     
+     return newFaceMapping;
+   }
   
 }

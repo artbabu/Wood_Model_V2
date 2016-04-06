@@ -21,9 +21,9 @@ class Wood
      lightSpecular(30, 30, 30);
      specular(122, 122, 122);
      shininess(0.7);
-    
+     
      translate(width/4,height/2,0);
-    
+     
      ModelManager mu = new ModelManager(this);
       
      mu.parseGrammar(production);

@@ -25,7 +25,7 @@ class ModelManager
    public ModelManager(Wood wood)
    {
      tanXLen = 25 ; // incre in x direction
-     radZLen = 25 ; // incre in z direction
+     radZLen = 20 ; // incre in z direction
      longYLen = 250;
      currWood = wood ;
      mu = new ModelUtil();
@@ -89,6 +89,7 @@ class ModelManager
        String faceType = mu.getsubPartStr(csArray,')',currPos);
        currPos = currPos + (faceType.length() );
        currFace =  currCell.constructFace(faceType);
+       currCell.cellShape.addChild(currFace.faceShape);
      }
    }
    

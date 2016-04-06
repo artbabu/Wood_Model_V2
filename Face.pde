@@ -41,8 +41,6 @@ class Face
   face = drawFace(face,v1,v2,v3,v4,brown,true,true);
   faceShape.addChild(face);
   
-  
-  
   face = createShape();
   face = drawFace(face,v11,v22,v33,v44,darkBrown,false,true); 
   faceShape.addChild(face);
@@ -62,6 +60,7 @@ class Face
   face = createShape();
  face = drawFace(face,v1,v11,v44,v4,brown,false,false);
  faceShape.addChild(face);
+  
   
 }
 
@@ -121,7 +120,6 @@ void insertPorousintoRadialWall(PShape cellWall,PVector v1,PVector v2,PVector v3
   float minY = v2.y ;
   float maxZ ;
   float minZ  ;
-  println(""+v2.z,v3.z);
   if(faceType.equals("-o") )
   {
      maxZ = v3.z - holeRad;
@@ -135,22 +133,29 @@ void insertPorousintoRadialWall(PShape cellWall,PVector v1,PVector v2,PVector v3
  
  
    
-  float incY = maxY / 10 ;
+  float incY = maxY / 15 ;
     float py = minY + incY ;
     float pz = minZ + ((maxZ - minZ) / 2) ;
     //float pz = (minZ,maxZ);
  while( py < (maxY - incY) )
  {
-    println(" points ==>"+py,pz);
    cellWall.beginContour();
     //println("*****************************************************************************");
   for(int i = 0 ; i < holeRes;i++)
   {
    
    float angle = TWO_PI  * i / holeRes;
+    if(faceType.equals("-o") )
+  {
    float cz =  pz + sin(  angle ) * (holeRad);
    float cy = py + cos(  angle  ) * (holeRad);
-   cellWall.vertex( x + 1, cy,cz);
+   cellWall.vertex( x , cy,cz);
+  }else
+  {
+    float cz =  pz + cos(  angle ) * (holeRad);
+   float cy = py + sin(  angle  ) * (holeRad);
+   cellWall.vertex( x , cy,cz);
+  }
   
   }
   // println("*****************************************************************************");
