@@ -30,26 +30,28 @@ class Ball{
   float endX;   // Final x-coordinate
   float endY;// Final y-coordinate
   float endZ;    // Final z-coordinate
+  boolean woodReached;
 
   Ball(int r, int id){
     //beginX = -500;
     //beginY = -500;
     //beginZ = 0;
-    beginX = random(-800, 800);
-    beginY = random(-800, 800);
-    beginZ = random(-800, 800);
+    beginX = random(-500, 500);
+    beginY = random(-500, 500);
+    beginZ = random(-500, 500);
    
-    endX = 20;
-    endY = 150;
-    endZ = 150;
+    endX = random(-800, 800);
+    endY = random(-800, 800);
+    endZ = random(-800, 800);
     ballid = id;
     radius = r;
     location.x = beginX ;
     location.y = beginY ;
     location.z = beginZ ;
+    woodReached = false;
   }
   
-  boolean move(Wood w){
+  int move(Wood w){
 
     //endX = random(-500, 500);
     //endY = random(-500, 500);
@@ -57,13 +59,16 @@ class Ball{
     // inital ball set up
     if(location.x  >= xMin - radius && location.x <= xMax + radius && location.y >= yMin - radius && location.y <= yMax + radius  && location.z >= zMin - radius && location.z <= zMax + radius){
       pct = 1.0;
+      woodReached = true;
+      println(location);
     }
     distX = endX - beginX;
     distY = endY - beginY;
     distZ = endZ - beginZ;
     
     translate (location.x, location.y, location.z);
-    sphere(radius);; noFill();
+    sphere(radius);
+    noFill();
     pct += step;
     // motion setup
     //location.x = location.x + (xSpeed * xDirection); 
@@ -74,33 +79,14 @@ class Ball{
       location.y = beginY + (pct * distY );
       location.z = beginZ + (pct * distZ );
       //location.y += gravity;
-      if (location.x>width-50) {
-       xDirection*=-1;
+      if ( location.x > width/2 || location.x < -width-2 || location.y <-height/2 || location.y > height/2 || location.z > width/2 || location.z < -width/2){
+        return 3;
       }
-     
-      if (location.y>height-50) {
-        yDirection*=-1;
-      }
-     
-      if (location.z>500) {
-        zDirection*=-1;
-      }
-     
-      if (location.x<50) {
-        xDirection*=-1;
-      }
-     
-      if (location.y<50) {
-        yDirection*=-1;
-      }
-     
-      if (location.z<0) {
-        zDirection*=-1;
-      }
-    }else{
-      return true;
     }
-    return false;
+    if(!woodReached && pct >= 1.0){
+        return 3;
+    }
+    return 2;
 
   }
   

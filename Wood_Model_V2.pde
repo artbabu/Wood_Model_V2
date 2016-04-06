@@ -17,7 +17,7 @@ Grammar grammar ;
 Wood w ;
 WoodMoveTracker woodMT ;
 int depth = 3;
-int numBalls = 100;
+int numBalls = 40;
 int ballSize = 10;
 int ballHitCount = 0;
 static int memberid = 0;
@@ -66,15 +66,16 @@ void setup() {
   setupGrammar(this);
   w = new Wood(production);
   woodMT = new WoodMoveTracker(w);
-  //float[] xArray = {w.b1Vector.x, w.b2Vector.x, w.b3Vector.x, w.b3Vector.x, w.b4Vector.x};
-  //float[] yArray = {w.b1Vector.y, w.b2Vector.y, w.b3Vector.y, w.b3Vector.y, w.b4Vector.y};
-  //float[] zArray = {w.b1Vector.z, w.b2Vector.z, w.b3Vector.z, w.b3Vector.z, w.b4Vector.z};
-  xMin = 0;
-  xMax = 200;
-  yMin = 0;
+  float[] xArray = {w.b1Vector.x, w.b2Vector.x, w.b3Vector.x, w.b3Vector.x, w.b4Vector.x};
+  float[] yArray = {w.b1Vector.y, w.b2Vector.y, w.b3Vector.y, w.b3Vector.y, w.b4Vector.y};
+  float[] zArray = {w.b1Vector.z, w.b2Vector.z, w.b3Vector.z, w.b3Vector.z, w.b4Vector.z};
+  println(min(zArray), max(zArray));
+  xMin = min(xArray);
+  xMax = max(xArray);
+  yMin = min(yArray);
   yMax = 250;
-  zMin = 0;
-  zMax = 200;
+  zMin = min(zArray);
+  zMax = max(zArray) + 20;
   
     cam = new PeasyCam(this,0,0,0,1500); 
   //for (int i = 0; i < numBalls; i++) {
@@ -104,14 +105,13 @@ void draw() {
   pushMatrix();
   Ball b = (Ball) balls.get(i);
   int reached = b.move(w);
-  println(reached);
   if(reached == 1){
     ballHitCount ++;
-  }else if (reached == 2){
-    balls.remove(balls.indexOf(b));
-  } else if (reached == 3){
-    
-  }
+    //if(!emc)
+    //  balls.remove(b);
+  }else if(reached == 3) {
+      balls.remove(b);
+  }  
   popMatrix();
  }
  if(balls.size() < numBalls){
