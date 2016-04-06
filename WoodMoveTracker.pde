@@ -120,7 +120,14 @@ class WoodMoveTracker
           c.startVector = new PVector(prevTanX,0,prevRadZ);
          updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
          prevTanX += c.tanXLen; 
+         if( j == 0 )
+          cr.setStartVector(c.startVector);
+        else if(j == cr.cellList.size() - 1 )
+          cr.setEndVector( new PVector(prevTanX + c.tanXLen ,0,prevRadZ + c.radZLen ));
+          
        }
+       
+         
      }else
      {
          for(int j = 0 ; j < cr.cellList.size() ; j++)

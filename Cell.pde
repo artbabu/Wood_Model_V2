@@ -27,7 +27,6 @@ class Cell
   
   public void setStartVector(PVector startVector)
   {
-    println(" Main Start Vector "+ startVector );
     this.startVector = startVector ;
   }
   

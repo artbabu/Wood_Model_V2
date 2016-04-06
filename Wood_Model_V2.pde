@@ -17,7 +17,7 @@ Grammar grammar ;
 Wood w ;
 WoodMoveTracker woodMT ;
 int depth = 3;
-int numBalls = 40;
+int numBalls = 100;
 int ballSize = 10;
 int ballHitCount = 0;
 static int memberid = 0;
@@ -35,6 +35,7 @@ float zMax;
  List<Float> rhList = new ArrayList<Float>()
  {
    {
+     add(0.00);
      add(0.10);
      add(0.20);
      add(0.30);
@@ -77,12 +78,7 @@ void setup() {
   zMin = min(zArray);
   zMax = max(zArray) + 20;
   
-    cam = new PeasyCam(this,0,0,0,1500); 
-  //for (int i = 0; i < numBalls; i++) {
-  //  //balls[i] = new Ball(15);
-  //  balls.add(new Ball(ballSize,memberid++));
-  //}
-  
+  cam = new PeasyCam(this,0,0,0,1500);   
 }
 
  
@@ -115,9 +111,14 @@ void draw() {
   popMatrix();
  }
  if(balls.size() < numBalls){
-    balls.add(new Ball(10,memberid++));
+    balls.add(new Ball(1,memberid++));
  }
-  
+ println("reached ball ==>"+ballHitCount);
+  if( ballHitCount == rhList.get(rhCount) * numBalls)
+  {
+    initateRHChange();
+    woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
+  }
  //if(frontRow <= midRow)
  //{
    //woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
@@ -143,7 +144,7 @@ void draw() {
 
 public void initateRHChange()
 {
-  if(rhCount < (rhList.size()-1))
+   if(rhCount < (rhList.size()-1))
      rhCount ++ ;
   else
   {
@@ -157,6 +158,8 @@ public void initateRHChange()
    frontRow = 0;
    lastRow = rhList.size() - 1 ;
    midRow = lastRow / 2 ;
+   
+  
 }
 void setupGrammar(PApplet pthis) {
   

@@ -60,7 +60,7 @@ class Ball{
     if(location.x  >= xMin - radius && location.x <= xMax + radius && location.y >= yMin - radius && location.y <= yMax + radius  && location.z >= zMin - radius && location.z <= zMax + radius){
       pct = 1.0;
       woodReached = true;
-      println(location);
+     // println(location);
     }
     distX = endX - beginX;
     distY = endY - beginY;

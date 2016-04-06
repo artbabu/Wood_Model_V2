@@ -61,7 +61,7 @@ class ModelManager
    
    public void addCurrCellRowToWood(PVector endColVec)
    {
-     currCellRow.setEndVector(endColVec) ;
+     currCellRow.setEndVector(new PVector(endColVec.x + tanXLen,endColVec.y,endColVec.z+radZLen)) ;
      currWood.cellRowList.add(currCellRow);
      currWood.woodShape.addChild(currCellRow.cellRowShape);
    }
