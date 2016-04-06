@@ -105,6 +105,7 @@ void setup() {
 
  
 void draw() {
+  
   drawCount++;
    
   background(20, 20, 200);
@@ -112,28 +113,29 @@ void draw() {
   rotateX(PI / 3);
   rotateY(PI / 3);
    
-   if( drawCount % 10 == 0)
-   {
-     initateRHChange();
-     woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
-   }
-   
-   stroke(255);
-   for (int i=0; i < balls.size(); ++i) {
-   pushMatrix();
-   Ball b = (Ball) balls.get(i);
-   int reached = b.move(w);
-   if(reached == 1){
-   ballHitCount ++;
-   }else if(reached == 3) {
-     balls.remove(b);
-   }  
-   popMatrix();
-   }
-   if(balls.size() < numBalls){
-   balls.add(new Ball(2,memberid++));
-   }
-   w.displayWood();
+  if( drawCount % 10 == 0)
+  {
+    initateRHChange();
+    woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
+  }
+  
+  stroke(255);
+  for (int i=0; i < balls.size(); ++i) {
+  pushMatrix();
+  Ball b = (Ball) balls.get(i);
+  int reached = b.move(w);
+  if(reached == 1){
+    ballHitCount ++;
+    balls.remove(b);
+  }else if(reached == 3) {
+    balls.remove(b);
+  }  
+  popMatrix();
+  }
+  if(balls.size() < numBalls){
+    balls.add(new Ball(2,memberid++));
+  }
+  w.displayWood();
 }
  
 public void initateRHChange()
@@ -149,8 +151,6 @@ public void initateRHChange()
     RHInc = !RHInc;
     setup();
   }
-     
-  println("********************trigger RH Change***********"+currRH);   
   woodMT.triggerRHChange(currRH);
 
 }

@@ -203,7 +203,7 @@ class WoodMoveTracker
  {
    
    float cTanX = tanX * SFT * (currAirMC - (woodMC/FSP));
-   println("calc Tanx ==> "+tanX+" * "+SFT+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+")) ==>"+Math.abs(cTanX));
+   //println("calc Tanx ==> "+tanX+" * "+SFT+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+")) ==>"+Math.abs(cTanX));
    return Math.abs(cTanX);
  }
  
@@ -211,7 +211,7 @@ class WoodMoveTracker
  {
   
    float cRadZ = radZ * SFR * (currAirMC - (woodMC/FSP));
-    println("calc Radx ==> "+radZ+" * "+SFR+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+"))==>"+Math.abs(cRadZ));
+    //println("calc Radx ==> "+radZ+" * "+SFR+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+"))==>"+Math.abs(cRadZ));
    return Math.abs(cRadZ);
  }
 }

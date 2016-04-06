@@ -34,9 +34,6 @@ class Ball{
   boolean counted;
 
   Ball(int r, int id){
-    //beginX = -500;
-    //beginY = -500;
-    //beginZ = 0;
     beginX = random(-500, 500);
     beginY = random(-500, 500);
     beginZ = random(-500, 500);
@@ -53,10 +50,6 @@ class Ball{
   }
   
   int move(Wood w){
-
-    //endX = random(-500, 500);
-    //endY = random(-500, 500);
-    //endZ = random(-500, 500);
     // inital ball set up
     if(location.x  >= xMin - radius && location.x <= xMax + radius && location.y >= yMin - radius && location.y <= yMax + radius  && location.z >= zMin - radius && location.z <= zMax + radius){
       pct = 1.0;
@@ -78,15 +71,10 @@ class Ball{
       println(ballid);
       return 1;
     }
-    // motion setup
-    //location.x = location.x + (xSpeed * xDirection); 
-    //location.y = location.y + (ySpeed * yDirection);
-    //location.z = location.z + (zSpeed * zDirection);
     if (pct < 1.0) {
       location.x = beginX + (pct * distX );
       location.y = beginY + (pct * distY );
       location.z = beginZ + (pct * distZ );
-      //location.y += gravity;
       if ( location.x > width/2 || location.x < -width-2 || location.y <-height/2 || location.y > height/2 || location.z > width/2 || location.z < -width/2){
         return 3;
       }
