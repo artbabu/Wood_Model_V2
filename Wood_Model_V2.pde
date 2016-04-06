@@ -28,6 +28,13 @@ float yMin;
 float yMax;
 float zMin;
 float zMax;
+int drawCount =1;
+
+float minRH = 0.10 ;
+float currRH = 0.0;
+float maxRH = 0.70 ;
+
+boolean RHInc = true ;
 
 //PVector end = new PVector(endX, endY, endZ);
  
@@ -35,16 +42,31 @@ float zMax;
  List<Float> rhList = new ArrayList<Float>()
  {
    {
-     add(0.00);
+     //add(0.00);
      add(0.10);
+     add(0.12);
+     add(0.15);
+     add(0.17);
      add(0.20);
+     add(0.22);
+     add(0.25);
+     add(0.27);
      add(0.30);
+     add(0.32);
+     add(0.35);
+     add(0.37);
      add(0.40);
+     add(0.45);
      add(0.50);
+     add(0.55);
      add(0.60);
+     add(0.65);
      add(0.70);
+     add(0.75);
      add(0.80);
+     add(0.85);
      add(0.90);
+     add(0.95);
    }
  };
   boolean rhIncChange = true ;
@@ -76,49 +98,51 @@ void setup() {
   yMin = min(yArray);
   yMax = 250;
   zMin = min(zArray);
-  zMax = max(zArray) + 20;
+  zMax = max(zArray) ;
   
   cam = new PeasyCam(this,0,0,0,1500);   
 }
 
  
 void draw() {
+  drawCount++;
  
- background(20, 20, 200);
+  background(20, 20, 200);
  
   rotateX(PI / 3);
   rotateY(PI / 3);
  
- //if( frontRow == midRow && lastRow == midRow)
- //{
- //initateRHChange();
- //}
+ if( drawCount % 10 == 0)
+ {
+  initateRHChange();
+  woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
+ }
  
   // w.displayWood();
  //lights(); 
  stroke(255);
  for (int i=0; i < balls.size(); ++i) {
-  pushMatrix();
-  Ball b = (Ball) balls.get(i);
-  int reached = b.move(w);
-  if(reached == 1){
-    ballHitCount ++;
-    //if(!emc)
-    //  balls.remove(b);
-  }else if(reached == 3) {
-      balls.remove(b);
-  }  
-  popMatrix();
+ pushMatrix();
+ Ball b = (Ball) balls.get(i);
+ int reached = b.move(w);
+ if(reached == 1){
+   ballHitCount ++;
+   //if(!emc)
+   //  balls.remove(b);
+ }else if(reached == 3) {
+     balls.remove(b);
+ }  
+ popMatrix();
  }
  if(balls.size() < numBalls){
-    balls.add(new Ball(1,memberid++));
+   balls.add(new Ball(2,memberid++));
  }
- println("reached ball ==>"+ballHitCount);
-  if( ballHitCount == rhList.get(rhCount) * numBalls)
-  {
-    initateRHChange();
-    woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
-  }
+ //println("reached ball ==>"+ballHitCount, drawCount);
+  //if( ballHitCount == rhList.get(rhCount) * numBalls)
+  //{
+  //  initateRHChange();
+  //  woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
+  //}
  //if(frontRow <= midRow)
  //{
    //woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
@@ -144,20 +168,32 @@ void draw() {
 
 public void initateRHChange()
 {
-   if(rhCount < (rhList.size()-1))
-     rhCount ++ ;
-  else
+  if(!RHInc && currRH >= 0.10)
   {
+    currRH = currRH - 0.05;
+  }else if(RHInc && currRH <= 0.70)
+  {
+    currRH = currRH + 0.05;
+  }else
+  {
+    RHInc = !RHInc;
     setup();
-     rhCount = 0;
   }
+   //if(rhCount < (rhList.size()-1))
+   //  rhCount ++ ;
+  //else
+   //{
+   //  noLoop();
+   //  //setup();
+   //  //rhCount = 0;
+  //}
      
-  println("********************trigger RH Change***********"+rhList.get(rhCount));   
-  woodMT.triggerRHChange(rhList.get(rhCount));
-   cellColLayer = 0;
-   frontRow = 0;
-   lastRow = rhList.size() - 1 ;
-   midRow = lastRow / 2 ;
+  println("********************trigger RH Change***********"+currRH);   
+  woodMT.triggerRHChange(currRH);
+   //cellColLayer = 0;
+   //frontRow = 0;
+   //lastRow = rhList.size() - 1 ;
+   //midRow = lastRow / 2 ;
    
   
 }

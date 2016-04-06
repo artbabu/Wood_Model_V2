@@ -31,6 +31,7 @@ class Ball{
   float endY;// Final y-coordinate
   float endZ;    // Final z-coordinate
   boolean woodReached;
+  boolean counted;
 
   Ball(int r, int id){
     //beginX = -500;
@@ -59,7 +60,10 @@ class Ball{
     // inital ball set up
     if(location.x  >= xMin - radius && location.x <= xMax + radius && location.y >= yMin - radius && location.y <= yMax + radius  && location.z >= zMin - radius && location.z <= zMax + radius){
       pct = 1.0;
-      woodReached = true;
+      if(woodReached)
+        counted = true;
+      else
+        woodReached = true;
      // println(location);
     }
     distX = endX - beginX;
@@ -70,6 +74,10 @@ class Ball{
     sphere(radius);
     noFill();
     pct += step;
+    if(woodReached && !counted){
+      println(ballid);
+      return 1;
+    }
     // motion setup
     //location.x = location.x + (xSpeed * xDirection); 
     //location.y = location.y + (ySpeed * yDirection);

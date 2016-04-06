@@ -26,8 +26,8 @@ class WoodMoveTracker
   // Formula Req
   
   final float  FSP = 0.28 ; // fiber saturation point [ Constant ]
-  final float SFR = 0.043 ; // shrinkage factor  - Radial
-  final float SFT = 0.075 ; // shrinkage factor - Tangential
+  final float SFR = 0.22 ; // shrinkage factor  - Radial
+  final float SFT = 0.37 ; // shrinkage factor - Tangential
   
    List<String> faceTypeOrder = new ArrayList<String>()
   {
@@ -84,11 +84,11 @@ class WoodMoveTracker
   public void updateWoodModel(int firstRow , int lastRow,int colLayer)
   {
     if(prevRH < currRH)
-     initWoodModelExpansion(firstRow,lastRow,colLayer);
+     initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,true);
     else
-     initWoodModelShrinkage(firstRow,lastRow,colLayer);
+     initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,false);
   }
-  public void initWoodModelExpansion(int firstRow,int lastRow,int colLayer)
+  public void initWoodModelExpansionOrShrinkage(int firstRow,int lastRow,int colLayer,boolean isSwell)
   {
     boolean updateWholeRow = true ;
     
@@ -112,11 +112,19 @@ class WoodMoveTracker
      {
        for(int j = 0 ; j < cr.cellList.size() ; j++)
        { 
-         println(" Start Vector "+prevTanX,0,prevRadZ);
+         
          
           Cell c = cr.cellList.get(j);
-          c.tanXLen += currTanX ;
-          c.radZLen += currRadZ ;
+          if(isSwell)
+          {
+           c.tanXLen += currTanX ;
+           c.radZLen += currRadZ ;
+          }
+          else
+          {
+           c.tanXLen -= currTanX ;
+           c.radZLen -= currRadZ ;
+          }
           c.startVector = new PVector(prevTanX,0,prevRadZ);
          updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
          prevTanX += c.tanXLen; 
@@ -132,7 +140,7 @@ class WoodMoveTracker
      {
          for(int j = 0 ; j < cr.cellList.size() ; j++)
        {
-           println(" Start Vector "+prevTanX,0,prevRadZ);
+           
          
          Cell c = cr.cellList.get(j);
          if( j == colLayer || j == (cr.cellList.size() - colLayer - 1))
