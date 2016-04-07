@@ -32,7 +32,7 @@ int drawCount =1;
 
 float minRH = 0.10 ;
 float currRH = 0.0;
-float maxRH = 0.70 ;
+float maxRH = 0.50 ;
 
 boolean RHInc = true ;
 
@@ -94,6 +94,7 @@ void setup() {
   lights();
   setupGrammar(this);
   w = new Wood(production);
+  //printStartVector();
   woodMT = new WoodMoveTracker(w);
   
   
@@ -107,54 +108,81 @@ void setup() {
   yMax = 250;
   zMin = min(zArray);
   zMax = max(zArray) ;
-  
+ 
    initateRHChange();
+   
   
   cam = new PeasyCam(this,0,0,0,1500);   
 }
-
+public void printStartVector()
+{
+    for(int i = 0 ; i < w.cellRowList.size() ; i++)
+    {
+     
+      CellRow cr = w.cellRowList.get(i);
+                 
+      
+      
+        for(int j = 0 ; j < cr.cellList.size() ; j++)
+        { 
+          println("start Vector ===>"+cr.cellList.get(j).startVector);
+        }
+    }
+}
  
 void draw() {
-     
-  background(20, 20, 200);
+  
+ 
+  background(30, 20, 200);
    
+  textSize(30);
+  fill(0);
+  text("Current Relative Humidity    =>"+currRH, - (width/4 + 290),- (height/2 + 290)); 
+  fill(0);
+  text("Current Air Moisture Content =>"+woodMT.currAirMC,- (width/4 + 260),- (height/2 + 260));
+  fill(0);
+  text("Current ood Moisture Content =>"+woodMT.woodMC,- (width/4 + 230),- (height/2 + 230)); 
+
   rotateX(PI / 3);
   rotateY(PI / 3);
    
   if( currSRow == midRow && currERow == midRow)
-    initateRHChange();
-  
+  {
+     println("Running");
+     initateRHChange();
+  }
   stroke(255);
   for (int i=0; i < balls.size(); ++i) {
-  //pushMatrix();
-  //Ball b = (Ball) balls.get(i);
-  //int reached = b.move(w);
-  //if(reached == 1){
-  //  ballHitCount ++;
-  //  //balls.remove(b);
-  //}else if(reached == 3) {
-  //  balls.remove(b);
-  //}  
-  //popMatrix();
+  pushMatrix();
+  Ball b = (Ball) balls.get(i);
+  int reached = b.move(w);
+  if(reached == 1){
+   ballHitCount ++;
+   //balls.remove(b);
+  }else if(reached == 3) {
+   balls.remove(b);
+  }  
+  popMatrix();
   }
   if(balls.size() < numBalls){
     balls.add(new Ball(2,memberid++));
   }
-  if(currSRow < currERow)
+  if(currSRow <= currERow )
   {
-    woodMT.updateWoodModel(currSRow,currERow,currSCol,currECol);
-    currSRow++;
-    currERow --;
-    currSCol ++ ;
-    currECol -- ;
-    println(currSRow,currERow,currSCol,currECol);
+   println(currSRow,currERow,currSCol,currECol);
+  woodMT.updateWoodModel(currSRow,currERow,currSCol,currECol);
+  currSRow ++;
+  currERow --;
+  currSCol ++ ;
+  currECol -- ;
+  
   }
   w.displayWood();
 }
  
 public void initateRHChange()
 {
-   maxRow = w.cellRowList.size();
+   maxRow = w.cellRowList.size() ;
   
   midRow = maxRow / 2 ;
   maxCellInRowNo = w.cellRowList.get(0).cellList.size();
@@ -163,10 +191,10 @@ public void initateRHChange()
   currERow = maxRow ;
   currECol = maxCellInRowNo ;
   
-  if(!RHInc && currRH >= 0.10)
+  if(!RHInc && currRH >= minRH)
   {
     currRH = currRH - 0.05;
-  }else if(RHInc && currRH <= 0.70)
+  }else if(RHInc && currRH <= maxRH)
   {
     currRH = currRH + 0.05;
   }else

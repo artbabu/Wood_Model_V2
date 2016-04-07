@@ -27,13 +27,14 @@ class Cell
   
   public void setStartVector(PVector startVector)
   {
+    println("start Vector ===>"+startVector);
     this.startVector = startVector ;
   }
   
   public Face constructFace(String faceType)
    {
-     println("Start Vector ==>"+startVector);
-     println("TanX RadZ ================================>"+tanXLen,radZLen);
+       //println("Start Vector ==>"+startVector);
+     //println("TanX RadZ ================================>"+tanXLen,radZLen);
       PVector v1 = getV1CoordinatesForFace(faceType);
       PVector v2 = getV2CoordinatesForFace(faceType) ;
       PVector v3 = getV3CoordinatesForFace(faceType) ;
@@ -44,7 +45,8 @@ class Cell
       currFace.setFaceWeight(tanXLen,radZLen,cellType);
       
       currFace.buildFace();
-        
+      
+        //println("Prev Start Vector =======>"+startVector);
       return currFace ;
    }
    

@@ -24,7 +24,7 @@ class ModelUtil
                   CellRow cr =  new CellRow();
                   
                   colVector = rowVector;
-                  cr.setStartVector(colVector);
+                  cr.setStartVector(new PVector(colVector.x,colVector.y,colVector.z));
                  // rowVector = new PVector(rowVector.x,rowVector.y,rowVector.z+(mm.radXLen)); // updating row vector for next row.
                   
                   mm.setCurrCellRow(cr);
@@ -46,7 +46,7 @@ class ModelUtil
                   isCellActive = true ;
                   
                   Cell cell =  new Cell();
-                  cell.setStartVector(colVector);
+                  cell.setStartVector(new PVector(colVector.x,colVector.y,colVector.z));
                   //colVector = new PVector(colVector.x+(mm.tanLen),colVector.y,colVector.z); // updating row vector for next col in a row.
                   
                   mm.setCurrCell(cell);

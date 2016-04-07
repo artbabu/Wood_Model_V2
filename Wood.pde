@@ -27,6 +27,7 @@ class Wood
      mu.parseGrammar(production);
       
      setCoordinatesOfWood(); 
+     
      //LUT.initialize();
   }
   public void setCoordinatesOfWood()

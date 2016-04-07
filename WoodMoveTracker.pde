@@ -129,7 +129,7 @@ class WoodMoveTracker
            
            resetCellDimension(c,i,j,isSwell);
            updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
-           prevTanX += c.tanXLen; 
+          // prevTanX += c.tanXLen; 
            if( j == 0 )
              cr.setStartVector(c.startVector);
            else if(j == cr.cellList.size() - 1 )
@@ -145,7 +145,7 @@ class WoodMoveTracker
            
            resetCellDimension(c,i,j,isSwell);
            updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
-           prevTanX += c.tanXLen; 
+           //prevTanX += c.tanXLen; 
            if( j == 0 )
              cr.setStartVector(c.startVector);
            else if(j == cr.cellList.size() - 1 )
@@ -154,77 +154,109 @@ class WoodMoveTracker
           prevTanX += c.tanXLen ; 
        }
      }
-     prevRadZ += cr.cellList.get(0).radZLen ;
-     prevTanX = 0;
+    // prevRadZ += cr.cellList.get(0).radZLen ;
+    // prevTanX = 0;
    }
    
   }
  public void resetCellDimension(Cell c,int currRow,int currCell,boolean isSwell)
  {
+    boolean isExpandingRowCell = false ;
    if(currRow <= currSRow)
    {
+     isExpandingRowCell = (currRow == currSRow ) ;
      if(currCell <= currSCol)
-     {   
-      c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z-currRadZ);
-      changeDimension(isSwell,true,true,c);   
+     {
+      if( isSwell)
+       c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z-currRadZ);
+      else
+       c.startVector =  new PVector( c.startVector.x + currTanX ,  c.startVector.y, c.startVector.z+currRadZ);
+       
+      changeDimension(isSwell,true,true,c,isExpandingRowCell);   
      }
      else  if(currCell <= currECol)
      {
-      c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z-currRadZ);
-      changeDimension(isSwell,true,true,c);   
+      
+      if( isSwell) 
+       c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z-currRadZ);
+      else
+       c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z+currRadZ);
+       
+      changeDimension(isSwell,true,true,c,isExpandingRowCell);   
      }
      else 
      {
-       c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z-currRadZ);
-       changeDimension(isSwell,false,true,c);   
+       if( isSwell) 
+        c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z-currRadZ);
+       else
+        c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z+currRadZ);
+        
+       changeDimension(isSwell,false,true,c,isExpandingRowCell);   
      }
    }else if(currRow <= currERow)
    {
+     isExpandingRowCell = (currRow == currERow ) ;
      if(currCell <= currSCol)
-     {   
-      c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z);
-      changeDimension(isSwell,true,true,c);   
+     {
+       if( isSwell) 
+       c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z);
+      else
+       c.startVector =  new PVector( c.startVector.x + currTanX ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,true,c,isExpandingRowCell);   
      }
      else  if(currCell <= currECol)
      {
-      c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z);
-      changeDimension(isSwell,true,true,c);   
+      
+       c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z);
+      
+      changeDimension(isSwell,true,true,c,isExpandingRowCell);   
      }
      else 
      {
+        
        c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z);
-       changeDimension(isSwell,false,true,c);   
+       changeDimension(isSwell,false,true,c,isExpandingRowCell);   
      }
    }else
    {
      if(currCell <= currSCol)
-     {   
+     { 
+       isExpandingRowCell = (currCell == currSCol ) ;
+       if( isSwell) 
       c.startVector =  new PVector( c.startVector.x - currTanX  ,  c.startVector.y, c.startVector.z);
-      changeDimension(isSwell,true,false,c);   
+      else
+        c.startVector =  new PVector( c.startVector.x + currTanX  ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,false,c,isExpandingRowCell);   
      }
      else  if(currCell <= currECol)
      {
-      c.startVector = new PVector( c.startVector.x + currTanX ,  c.startVector.y, c.startVector.z);
-      changeDimension(isSwell,true,false,c);   
+       isExpandingRowCell = (currCell == currECol ) ;
+       if( isSwell) 
+      c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,false,c,isExpandingRowCell);   
      }
    }
+   
  }
- public void changeDimension(boolean isSwell,boolean isTanX,boolean isRadZ,Cell c)
+ public void changeDimension(boolean isSwell,boolean isTanX,boolean isRadZ,Cell c,boolean isExpandingRowCell)
  {
-   if(isSwell)
-     {
-      if(isTanX)
-        c.tanXLen += currTanX ;
-      if(isRadZ)
-        c.radZLen += currRadZ ;
-     }
-   else
-     {
-      if(isTanX)
-         c.tanXLen -= currTanX ;
-      if(isRadZ)
-         c.radZLen -= currRadZ ;
-     }
+   if(isExpandingRowCell)
+   {
+     if(isSwell)
+       {
+        if(isTanX)
+          c.tanXLen += currTanX ;
+        if(isRadZ)
+          c.radZLen += currRadZ ;
+       }
+     else
+       {
+        if(isTanX)
+           c.tanXLen -= currTanX ;
+        if(isRadZ)
+           c.radZLen -= currRadZ ;
+       }
+  }
  }
  public void updateCellModel( Cell c  , PShape cell)
  {
