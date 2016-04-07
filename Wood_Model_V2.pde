@@ -32,7 +32,7 @@ int drawCount =1;
 
 float minRH = 0.10 ;
 float currRH = 0.0;
-float maxRH = 0.50 ;
+float maxRH = 0.75 ;
 
 boolean RHInc = true ;
 boolean swell = false;

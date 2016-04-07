@@ -308,17 +308,36 @@ class WoodMoveTracker
  
  public float calculateTanLenForExpandedCell(float tanX)
  {
+   float a = 0.00018;
+   float b = 0.00601;
+   float c = 0.13943;
+   float d = 4.88620;
    
-   float cTanX = tanX * SFT * (currAirMC - (woodMC/FSP));
+   float ourEquTanX = a * pow(woodMC*100, 3) + b * pow(woodMC*100, 2) + c * woodMC*100 + d;
+   return Math.abs((ourEquTanX * tanX)/100);
+   
+   //The below is as per the paper aarthi refered. The above equ is what Ian gave us
+   //float cTanX = tanX * SFT * (currAirMC - (woodMC/FSP));
    //println("calc Tanx ==> "+tanX+" * "+SFT+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+")) ==>"+Math.abs(cTanX));
-   return Math.abs(cTanX);
+   //println(woodMC*100, (ourEquTanX * tanX) / 100 );
+   //return Math.abs(cTanX);
+
  }
  
  public float calculateRadLenForExpandedCell(float radZ)
  {
   
-   float cRadZ = radZ * SFR * (currAirMC - (woodMC/FSP));
+   float a = 0.00018;
+   float b = 0.00601;
+   float c = 0.13943;
+   float d = 4.88620;
+   
+   float ourEquRadZ = a * pow(woodMC, 3) + b * pow(woodMC, 2) + c * woodMC + d;  
+   return Math.abs((ourEquRadZ * radZ)/100);
+   
+   //The below is as per the paper aarthi refered. The above equ is what Ian gave us
+   //float cRadZ = radZ * SFR * (currAirMC - (woodMC/FSP));
     //println("calc Radx ==> "+radZ+" * "+SFR+" * ("+currAirMC +" - ("+woodMC+" / "+FSP+"))==>"+Math.abs(cRadZ));
-   return Math.abs(cRadZ);
+   //return Math.abs(cRadZ);
  }
 }
