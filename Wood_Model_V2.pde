@@ -35,6 +35,7 @@ float currRH = 0.0;
 float maxRH = 0.50 ;
 
 boolean RHInc = true ;
+boolean swell = false;
 
 //PVector end = new PVector(endX, endY, endZ);
  
@@ -134,48 +135,51 @@ void draw() {
   
  
   background(30, 20, 200);
-   
+  drawCount ++; 
   textSize(30);
   fill(0);
   text("Current Relative Humidity    =>"+currRH, - (width/4 + 290),- (height/2 + 290)); 
   fill(0);
-  text("Current Air Moisture Content =>"+woodMT.currAirMC,- (width/4 + 260),- (height/2 + 260));
+  text("Current Air Moisture Content =>"+woodMT.currAirMC,- (width/4 + 290),- (height/2 + 260));
   fill(0);
-  text("Current ood Moisture Content =>"+woodMT.woodMC,- (width/4 + 230),- (height/2 + 230)); 
+  text("Current Wood Moisture Content =>"+woodMT.woodMC,- (width/4 + 290),- (height/2 + 230)); 
 
   rotateX(PI / 3);
   rotateY(PI / 3);
-   
-  if( currSRow == midRow && currERow == midRow)
-  {
-     println("Running");
-     initateRHChange();
-  }
   stroke(255);
-  for (int i=0; i < balls.size(); ++i) {
-  pushMatrix();
-  Ball b = (Ball) balls.get(i);
-  int reached = b.move(w);
-  if(reached == 1){
-   ballHitCount ++;
-   //balls.remove(b);
-  }else if(reached == 3) {
-   balls.remove(b);
-  }  
-  popMatrix();
+  if(swell){
+    for (int i=0; i < balls.size(); ++i) {
+    pushMatrix();
+    Ball b = (Ball) balls.get(i);
+    int reached = b.move(w);
+    if(reached == 1){
+      ballHitCount ++;
+      //balls.remove(b);
+    }else if(reached == 3) {
+      balls.remove(b);
+    }  
+    popMatrix();
+    }
+    if(balls.size() < numBalls){
+      balls.add(new Ball(2,memberid++));
+    }
   }
-  if(balls.size() < numBalls){
-    balls.add(new Ball(2,memberid++));
-  }
-  if(currSRow <= currERow )
-  {
-   println(currSRow,currERow,currSCol,currECol);
-  woodMT.updateWoodModel(currSRow,currERow,currSCol,currECol);
-  currSRow ++;
-  currERow --;
-  currSCol ++ ;
-  currECol -- ;
   
+  if(drawCount % 10 == 0 ){
+    if(currSRow <= currERow )
+    {
+      woodMT.updateWoodModel(currSRow,currERow,currSCol,currECol);
+      currSRow ++;
+      currERow --;
+      currSCol ++ ;
+      currECol -- ;
+    
+    }
+    
+    if( currSRow == midRow && currERow == midRow)
+    {
+       initateRHChange();
+    }
   }
   w.displayWood();
 }

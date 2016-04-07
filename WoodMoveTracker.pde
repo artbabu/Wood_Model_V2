@@ -96,10 +96,14 @@ class WoodMoveTracker
     this.currSCol = currSCol;
     this.currECol = currECol;
     
-    if(prevRH < currRH)
+    if(prevRH < currRH){
+      swell = true;
       initWoodModelExpansionOrShrinkage(true);
-    else
+    }
+    else{
+      swell = false;
       initWoodModelExpansionOrShrinkage(false);
+    }
   }
   public void initWoodModelExpansionOrShrinkage(boolean isSwell)
   {
