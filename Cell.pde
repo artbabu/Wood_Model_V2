@@ -32,7 +32,8 @@ class Cell
   
   public Face constructFace(String faceType)
    {
-     
+     println("Start Vector ==>"+startVector);
+     println("TanX RadZ ================================>"+tanXLen,radZLen);
       PVector v1 = getV1CoordinatesForFace(faceType);
       PVector v2 = getV2CoordinatesForFace(faceType) ;
       PVector v3 = getV3CoordinatesForFace(faceType) ;

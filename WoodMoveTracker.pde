@@ -16,10 +16,17 @@ class WoodMoveTracker
   // equilibrium Moisture content
   float emc ;
   
-  int currRowNo ;// cell row number which is being updated. 
+  float currSRow;
+  float currERow;
+  
+  float currSCol;
+  float currECol ;// cell row number which is being updated. 
   
   float prevTanX = 0;
   float prevRadZ = 0;
+  
+  float currTanX = 0;
+  float currRadZ = 0;
   
   Wood wood;
   
@@ -82,24 +89,33 @@ class WoodMoveTracker
      }
     resetWoodCellSaturation();
   }
-  public void updateWoodModel(int firstRow , int lastRow,int colLayer)
+  public void updateWoodModel(float currSRow,float currERow,float currSCol,float currECol)
   {
+    this.currSRow = currSRow;
+    this.currERow = currERow;
+    this.currSCol = currSCol;
+    this.currECol = currECol;
+    
     if(prevRH < currRH)
-      initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,true);
+      initWoodModelExpansionOrShrinkage(true);
     else
-      initWoodModelExpansionOrShrinkage(firstRow,lastRow,colLayer,false);
+      initWoodModelExpansionOrShrinkage(false);
   }
-  public void initWoodModelExpansionOrShrinkage(int firstRow,int lastRow,int colLayer,boolean isSwell)
+  public void initWoodModelExpansionOrShrinkage(boolean isSwell)
   {
     boolean updateWholeRow = true ;
     
    // println(" Tanx , RadZ "+prevRadZ,prevTanX);
     
-    float currTanX = 0;
-    float currRadZ = 0;
+     currTanX = 0;
+     currRadZ = 0;
     
     for(int i = 0 ; i < wood.cellRowList.size() ; i++)
     {
+      if(i == currSRow || i ==  currERow )
+       updateWholeRow = true ;
+      else
+       updateWholeRow = false ;
       
       CellRow cr = wood.cellRowList.get(i);
                  
@@ -110,43 +126,31 @@ class WoodMoveTracker
         for(int j = 0 ; j < cr.cellList.size() ; j++)
         { 
            Cell c = cr.cellList.get(j);
-           if(isSwell)
-           {
-             c.tanXLen += currTanX ;
-             c.radZLen += currRadZ ;
-           }
-           else
-           {
-             c.tanXLen -= currTanX ;
-             c.radZLen -= currRadZ ;
-           }
-           c.startVector = new PVector(prevTanX,0,prevRadZ);
+           
+           resetCellDimension(c,i,j,isSwell);
            updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
            prevTanX += c.tanXLen; 
            if( j == 0 )
              cr.setStartVector(c.startVector);
            else if(j == cr.cellList.size() - 1 )
-             cr.setEndVector( new PVector(prevTanX + c.tanXLen ,0,prevRadZ + c.radZLen ));
+             cr.setEndVector( new PVector(c.startVector.x + c.tanXLen ,c.startVector.y,c.startVector.z + c.radZLen ));
        }  
      }else
      {
        for(int j = 0 ; j < cr.cellList.size() ; j++)
        {  
          Cell c = cr.cellList.get(j);
-         if( j == colLayer || j == (cr.cellList.size() - colLayer - 1))
+         if( j <= currSCol || j <= currECol)
          {
            
-           c.tanXLen += currTanX ;
-           c.radZLen += currRadZ ;
-           c.startVector = new PVector(prevTanX,0,prevRadZ);
+           resetCellDimension(c,i,j,isSwell);
            updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
-          
-         } else
-         {
-           //c.startVector = new PVector(prevTanX,0,prevRadZ);
-           updateCellModel(c,wood.woodShape.getChild(i).getChild(j));
-          
-         }
+           prevTanX += c.tanXLen; 
+           if( j == 0 )
+             cr.setStartVector(c.startVector);
+           else if(j == cr.cellList.size() - 1 )
+             cr.setEndVector( new PVector(c.startVector.x + c.tanXLen ,c.startVector.y,c.startVector.z + c.radZLen ));
+         } 
           prevTanX += c.tanXLen ; 
        }
      }
@@ -155,7 +159,74 @@ class WoodMoveTracker
    }
    
   }
- public void updateCellModel( Cell c , PShape cell)
+ public void resetCellDimension(Cell c,int currRow,int currCell,boolean isSwell)
+ {
+   if(currRow <= currSRow)
+   {
+     if(currCell <= currSCol)
+     {   
+      c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z-currRadZ);
+      changeDimension(isSwell,true,true,c);   
+     }
+     else  if(currCell <= currECol)
+     {
+      c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z-currRadZ);
+      changeDimension(isSwell,true,true,c);   
+     }
+     else 
+     {
+       c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z-currRadZ);
+       changeDimension(isSwell,false,true,c);   
+     }
+   }else if(currRow <= currERow)
+   {
+     if(currCell <= currSCol)
+     {   
+      c.startVector =  new PVector( c.startVector.x - currTanX ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,true,c);   
+     }
+     else  if(currCell <= currECol)
+     {
+      c.startVector = new PVector( c.startVector.x ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,true,c);   
+     }
+     else 
+     {
+       c.startVector = new PVector( c.startVector.x  ,  c.startVector.y, c.startVector.z);
+       changeDimension(isSwell,false,true,c);   
+     }
+   }else
+   {
+     if(currCell <= currSCol)
+     {   
+      c.startVector =  new PVector( c.startVector.x - currTanX  ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,false,c);   
+     }
+     else  if(currCell <= currECol)
+     {
+      c.startVector = new PVector( c.startVector.x + currTanX ,  c.startVector.y, c.startVector.z);
+      changeDimension(isSwell,true,false,c);   
+     }
+   }
+ }
+ public void changeDimension(boolean isSwell,boolean isTanX,boolean isRadZ,Cell c)
+ {
+   if(isSwell)
+     {
+      if(isTanX)
+        c.tanXLen += currTanX ;
+      if(isRadZ)
+        c.radZLen += currRadZ ;
+     }
+   else
+     {
+      if(isTanX)
+         c.tanXLen -= currTanX ;
+      if(isRadZ)
+         c.radZLen -= currRadZ ;
+     }
+ }
+ public void updateCellModel( Cell c  , PShape cell)
  {
    LinkedHashMap<String,PShape> faceTypeMapping = c.getNewFaceMappingForUpdate();
    

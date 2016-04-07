@@ -73,14 +73,20 @@ boolean RHInc = true ;
   
   
   int rhCount = 0;
-  int frontRow = 0 ;
-  int lastRow = 0;
-  int cellColLayer = 0;
-  int midRow = 0;
  
+  int currSRow = 0;
+  int currSCol = 0;
+  
+  int currERow = 0;
+  int currECol = 0;
+  
+  int maxRow = 0;
+  int midRow = 0;
+  int maxCellInRowNo =0;
+  
 void setup() {
   
-   size(1200, 1000, P3D);
+  size(1200, 1000, P3D);
  
   ambientLight(80, 80, 80);
   directionalLight(100, 100, 100, -1, -1, 1);  
@@ -89,6 +95,8 @@ void setup() {
   setupGrammar(this);
   w = new Wood(production);
   woodMT = new WoodMoveTracker(w);
+  
+  
   float[] xArray = {w.b1Vector.x, w.b2Vector.x, w.b3Vector.x, w.b3Vector.x, w.b4Vector.x};
   float[] yArray = {w.b1Vector.y, w.b2Vector.y, w.b3Vector.y, w.b3Vector.y, w.b4Vector.y};
   float[] zArray = {w.b1Vector.z, w.b2Vector.z, w.b3Vector.z, w.b3Vector.z, w.b4Vector.z};
@@ -100,46 +108,61 @@ void setup() {
   zMin = min(zArray);
   zMax = max(zArray) ;
   
+   initateRHChange();
+  
   cam = new PeasyCam(this,0,0,0,1500);   
 }
 
  
 void draw() {
-  
-  drawCount++;
-   
+     
   background(20, 20, 200);
    
   rotateX(PI / 3);
   rotateY(PI / 3);
    
-  if( drawCount % 10 == 0)
-  {
+  if( currSRow == midRow && currERow == midRow)
     initateRHChange();
-    woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
-  }
   
   stroke(255);
   for (int i=0; i < balls.size(); ++i) {
-  pushMatrix();
-  Ball b = (Ball) balls.get(i);
-  int reached = b.move(w);
-  if(reached == 1){
-    ballHitCount ++;
-    balls.remove(b);
-  }else if(reached == 3) {
-    balls.remove(b);
-  }  
-  popMatrix();
+  //pushMatrix();
+  //Ball b = (Ball) balls.get(i);
+  //int reached = b.move(w);
+  //if(reached == 1){
+  //  ballHitCount ++;
+  //  //balls.remove(b);
+  //}else if(reached == 3) {
+  //  balls.remove(b);
+  //}  
+  //popMatrix();
   }
   if(balls.size() < numBalls){
     balls.add(new Ball(2,memberid++));
+  }
+  if(currSRow < currERow)
+  {
+    woodMT.updateWoodModel(currSRow,currERow,currSCol,currECol);
+    currSRow++;
+    currERow --;
+    currSCol ++ ;
+    currECol -- ;
+    println(currSRow,currERow,currSCol,currECol);
   }
   w.displayWood();
 }
  
 public void initateRHChange()
 {
+   maxRow = w.cellRowList.size();
+  
+  midRow = maxRow / 2 ;
+  maxCellInRowNo = w.cellRowList.get(0).cellList.size();
+  currSRow = 0;
+  currSCol = 0;
+  currERow = maxRow ;
+  currECol = maxCellInRowNo ;
+  
   if(!RHInc && currRH >= 0.10)
   {
     currRH = currRH - 0.05;
@@ -151,6 +174,7 @@ public void initateRHChange()
     RHInc = !RHInc;
     setup();
   }
+  println("trigger ==>"+currRH);
   woodMT.triggerRHChange(currRH);
 
 }
