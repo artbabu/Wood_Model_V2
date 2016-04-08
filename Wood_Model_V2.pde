@@ -113,7 +113,7 @@ void draw() {
   rotateX(PI / 3);
   rotateY(PI / 3);
    
-  if( drawCount % 10 == 0)
+  if( drawCount % 40 == 0)
   {
     initateRHChange();
     woodMT.updateWoodModel(frontRow,lastRow,cellColLayer);
@@ -126,7 +126,7 @@ void draw() {
   int reached = b.move(w);
   if(reached == 1){
     ballHitCount ++;
-    balls.remove(b);
+    //balls.remove(b);
   }else if(reached == 3) {
     balls.remove(b);
   }  
